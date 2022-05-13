@@ -24,8 +24,6 @@
  
    const countries = ["Egypt", "Canada", "Australia", "Ireland"]
  
-   const [date, setDate] = useState(new Date());
- 
    return (
      <SafeAreaView style={styles.container}>
        <ScrollView
