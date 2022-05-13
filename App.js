@@ -1,163 +1,180 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, { useEffect } from 'react';
+import { View, ActivityIndicator } from 'react-native';
+import { 
+  NavigationContainer, 
+  DefaultTheme as NavigationDefaultTheme,
+  DarkTheme as NavigationDarkTheme
+} from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
- import React, { useState } from 'react';
- import {
-   SafeAreaView,
-   ScrollView,
-   StyleSheet,
-   Text,
-   View,
-   TextInput,
-   TouchableOpacity
- } from 'react-native';
- import SelectDropdown from 'react-native-select-dropdown'
- import SelectedDate from './src/component/SelectDate';
- 
- 
- const App = () => {
- 
-   const countries = ["Egypt", "Canada", "Australia", "Ireland"]
- 
-   return (
-     <SafeAreaView style={styles.container}>
-       <ScrollView
-         contentInsetAdjustmentBehavior="automatic"
-       >
-         <View style={styles.header}>
-           <Text style={{ fontSize: 20, marginTop: 20, fontWeight: 'bold' }}>Xuất bán hàng</Text>
-           <Text style={{ fontSize: 10, marginTop: 20, marginBottom: 20 }}>Công ty cổ phần Viễn thông New Telecom</Text>
-         </View>
-         <View style={styles.main}>
-           <View style={styles.pickerDate}>
-             <SelectedDate />
-           </View>
-           <View style={styles.add}>
-             <View style={{ flex: 5 }}>
-               <TextInput
-                 style={styles.input}
-               />
-               
-             </View>
-             <View style={{ flex: 2, marginLeft: 10 }}>
-               <TouchableOpacity
-                 style={styles.button}
-               >
-                 <Text style={{ color: "#ffff" }}>Thêm</Text>
-               </TouchableOpacity>
-             </View>
-           </View>
-           <View style={styles.select_1}>
-             <SelectDropdown
-               data={countries}
-               onSelect={(selectedItem, index) => {
-                 console.log(selectedItem, index)
-               }}
-               defaultButtonText = "Chưa kí"
-               buttonStyle = {{borderRadius: 10, width: "100%"}}
-               dropdownBackgroundColor = "#ffff"
-               dropdownIconPosition = "right"
-               buttonTextAfterSelection={(selectedItem, index) => {
-                 // text represented after item is selected
-                 // if data array is an array of objects then return selectedItem.property to render after item is selected
-                 return selectedItem
-               }}
-               rowTextForSelection={(item, index) => {
-                 // text represented for each item in dropdown
-                 // if data array is an array of objects then return item.property to represent item in dropdown
-                 return item
-               }}
-             />
-           </View>
-           <View style={styles.select_2}>
-             <SelectDropdown
-               data={countries}
-               onSelect={(selectedItem, index) => {
-                 console.log(selectedItem, index)
-               }}
-               defaultButtonText = "1C22TYY"
-               buttonStyle = {{borderRadius: 10, width: "100%"}}
-               dropdownBackgroundColor = "#ffff"
-               dropdownIconPosition = "right"
-               buttonTextAfterSelection={(selectedItem, index) => {
-                 // text represented after item is selected
-                 // if data array is an array of objects then return selectedItem.property to render after item is selected
-                 return selectedItem
-               }}
-               rowTextForSelection={(item, index) => {
-                 // text represented for each item in dropdown
-                 // if data array is an array of objects then return item.property to represent item in dropdown
-                 return item
-               }}
-             />
-           </View>
-           <View style={{marginTop: 20}}>
-             <View style={{ flex: 1, marginLeft: 10, marginTop: 20 }}>
-               <TouchableOpacity
-                 style={styles.button}
-               >
-                 <Text style={{ color: "#ffff" }}>Refresh</Text>
-               </TouchableOpacity>
-             </View>
-             <View style={{ flex: 1, marginLeft: 10, marginTop: 20 }}>
-               <TouchableOpacity
-                 style={styles.button}
-                 onPress={() => alert('Error: Bạn chờ chút thử lại')}
-               >
-                 <Text style={{ color: "#ffff" }}>Thông báo</Text>
-               </TouchableOpacity>
-             </View>
-           </View>
-         </View>
-       </ScrollView>
-     </SafeAreaView>
-   );
- };
- 
- const styles = StyleSheet.create({
-   container: {
-     marginLeft: 5,
-     paddingHorizontal: 24,
-   },
-   header: {
-     marginTop: 20
-   },
-   main: {
-     marginTop: 20
-   },
-   input: {
-     height: 40,
-     width: '100%',
-     borderWidth: 1,
-   },
-   pickerDate: {
-     width: '100%',
-   },
-   add: {
-     flexDirection: 'row',
-     flexWrap: 'wrap',
-     marginTop: 20
-   },
-   button: {
-     alignItems: "center",
-     backgroundColor: "#4CAE4C",
-     padding: 10,
-     borderRadius: 10
-   },
-   select_1: {
-     flex: 1,
-     marginTop: 20,
-   },
-   select_2: {
-     flex: 1,
-     marginTop: 20,
-   }
- });
- 
- export default App;
- 
+import { 
+  Provider as PaperProvider, 
+  DefaultTheme as PaperDefaultTheme,
+  DarkTheme as PaperDarkTheme 
+} from 'react-native-paper';
+import 'react-native-gesture-handler'
+
+import { DrawerContent } from './src/screens/DrawerContent';
+
+import MainTabScreen from './src/screens/MainTabScreen';
+import SupportScreen from './src/screens/SupportScreen';
+import BluetoothScreen from './src/screens/BluetoothScreen';
+import WebScreen from './src/screens/VinhHyWeb';
+
+
+import { AuthContext } from './src/components/context';
+
+import RootStackScreen from './src/screens/RootStackScreen';
+
+import  AsyncStorage  from 'react-native';
+
+const Drawer = createDrawerNavigator();
+
+const App = () => {
+  // const [isLoading, setIsLoading] = React.useState(true);
+  // const [userToken, setUserToken] = React.useState(null); 
+
+  const [isDarkTheme, setIsDarkTheme] = React.useState(false);
+
+  const initialLoginState = {
+    isLoading: true,
+    userName: null,
+    userToken: null,
+  };
+
+  const CustomDefaultTheme = {
+    ...NavigationDefaultTheme,
+    ...PaperDefaultTheme,
+    colors: {
+      ...NavigationDefaultTheme.colors,
+      ...PaperDefaultTheme.colors,
+      background: '#ffffff',
+      text: '#333333'
+    }
+  }
+  
+  const CustomDarkTheme = {
+    ...NavigationDarkTheme,
+    ...PaperDarkTheme,
+    colors: {
+      ...NavigationDarkTheme.colors,
+      ...PaperDarkTheme.colors,
+      background: '#333333',
+      text: '#ffffff'
+    }
+  }
+
+  const theme = isDarkTheme ? CustomDarkTheme : CustomDefaultTheme;
+
+  const loginReducer = (prevState, action) => {
+    switch( action.type ) {
+      case 'RETRIEVE_TOKEN': 
+        return {
+          ...prevState,
+          userToken: action.token,
+          isLoading: false,
+        };
+      case 'LOGIN': 
+        return {
+          ...prevState,
+          userName: action.id,
+          userToken: action.token,
+          isLoading: false,
+        };
+      case 'LOGOUT': 
+        return {
+          ...prevState,
+          userName: null,
+          userToken: null,
+          isLoading: false,
+        };
+      case 'REGISTER': 
+        return {
+          ...prevState,
+          userName: action.id,
+          userToken: action.token,
+          isLoading: false,
+        };
+    }
+  };
+
+  const [loginState, dispatch] = React.useReducer(loginReducer, initialLoginState);
+
+  const authContext = React.useMemo(() => ({
+    signIn: async(foundUser) => {
+      // setUserToken('fgkj');
+      // setIsLoading(false);
+      const userToken = String(foundUser[0].userToken);
+      const userName = foundUser[0].username;
+      
+      try {
+        await AsyncStorage.setItem('userToken', userToken);
+      } catch(e) {
+        console.log(e);
+      }
+      // console.log('user token: ', userToken);
+      dispatch({ type: 'LOGIN', id: userName, token: userToken });
+    },
+    signOut: async() => {
+      // setUserToken(null);
+      // setIsLoading(false);
+      try {
+        await AsyncStorage.removeItem('userToken');
+      } catch(e) {
+        console.log(e);
+      }
+      dispatch({ type: 'LOGOUT' });
+    },
+    signUp: () => {
+      // setUserToken('fgkj');
+      // setIsLoading(false);
+    },
+    toggleTheme: () => {
+      setIsDarkTheme( isDarkTheme => !isDarkTheme );
+    }
+  }), []);
+
+  useEffect(() => {
+    setTimeout(async() => {
+      // setIsLoading(false);
+      let userToken;
+      userToken = null;
+      try {
+        userToken = await AsyncStorage.getItem('userToken');
+      } catch(e) {
+        console.log(e);
+      }
+      // console.log('user token: ', userToken);
+      dispatch({ type: 'RETRIEVE_TOKEN', token: userToken });
+    }, 1000);
+  }, []);
+
+  if( loginState.isLoading ) {
+    return(
+      <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+        <ActivityIndicator size="large"/>
+      </View>
+    );
+  }
+  return (
+    <PaperProvider theme={theme}>
+    <AuthContext.Provider value={authContext}>
+    <NavigationContainer theme={theme}>
+      { loginState.userToken !== null ? (
+        <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+          <Drawer.Screen name="HomeDrawer" component={MainTabScreen} />
+          <Drawer.Screen name="SupportScreen" component={SupportScreen} />
+          <Drawer.Screen name="BluetoothScreen" component={BluetoothScreen} />
+          <Drawer.Screen name="WebScreen" component={WebScreen} />
+        </Drawer.Navigator>
+      )
+    :
+      <RootStackScreen/>
+    }
+    </NavigationContainer>
+    </AuthContext.Provider>
+    </PaperProvider>
+  );
+}
+
+export default App;
