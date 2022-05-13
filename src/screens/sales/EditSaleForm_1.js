@@ -47,32 +47,12 @@
          </View>
          <View style={styles.main}>
            <View>
-             <Text>Email: </Text>
+             <Text>Ngày: </Text>
              <View style={styles.date}>
-               <TextInput showSoftInputOnFocus={false} style={{ marginLeft: 20 }}></TextInput>
+               <TextInput style={{ marginLeft: 20 }}>09/02/22</TextInput>
              </View>
            </View>
-           <View>
-             <Text>Số điện thoại: </Text>
-             <View style={styles.date}>
-               <TextInput style={{ marginLeft: 20 }}></TextInput>
-             </View>
-           </View>
-           <View>
-             <Text>Số tài khoản: </Text>
-             <View style={styles.date}>
-               <TextInput style={{ marginLeft: 20 }}></TextInput>
-             </View>
-           </View>
-           <View>
-             <Text>Người mua hàng: </Text>
-             <View style={styles.date}>
-               <TextInput style={{ marginLeft: 20 }}></TextInput>
-             </View>
-           </View>
-           <View>
-             <Text>Hình thức thanh toán: </Text>
-             <Dropdown
+           <Dropdown
              style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
              placeholderStyle={styles.placeholderStyle}
              selectedTextStyle={styles.selectedTextStyle}
@@ -101,6 +81,55 @@
                />
              )}
            />
+           <Dropdown
+             style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+             placeholderStyle={styles.placeholderStyle}
+             selectedTextStyle={styles.selectedTextStyle}
+             inputSearchStyle={styles.inputSearchStyle}
+             iconStyle={styles.iconStyle}
+             data={data}
+             search
+             maxHeight={300}
+             labelField="label"
+             valueField="value"
+             placeholder={!isFocus ? 'C22TYY' : '...'}
+             searchPlaceholder="Search..."
+             value={value}
+             onFocus={() => setIsFocus(true)}
+             onBlur={() => setIsFocus(false)}
+             onChange={item => {
+               setValue(item.value);
+               setIsFocus(false);
+             }}
+             renderLeftIcon={() => (
+               <AntDesign
+                 style={styles.icon}
+                 color={isFocus ? 'blue' : 'black'}
+                 name="Safety"
+                 size={20}
+               />
+             )}
+           />
+           <View>
+             <Text>Số hóa đơn: </Text>
+             <View style={styles.date}>
+               <TextInput showSoftInputOnFocus={false} style={{ marginLeft: 20 }}>104</TextInput>
+             </View>
+           </View>
+           <View>
+             <Text>Khách hàng: </Text>
+             <View style={styles.date}>
+               <TextInput style={{ marginLeft: 20 }}>0306131641</TextInput>
+             </View>
+             <View style={{borderColor: '#000', borderWidth: 1, borderRadius: 10, alignContent: 'center', justifyContent: 'center', marginTop: 10}}>
+               <TextInput style={{ marginLeft: 20 }}>CÔNG TY TNHH CẢI TIẾN XANH</TextInput>
+             </View>
+           </View>
+           <View>
+             <Text>Địa chỉ: </Text>
+             <View style={styles.date}>
+               <TextInput style={{ marginLeft: 20 }}>415 Tân Kỳ Tân Quý, Phường Tân Quý, Quận Tân Phú, Thành phố Hồ Chí Minh, Việt Nam</TextInput>
+             </View>
            </View>
            <View style={{ flex: 1}}>
              <TouchableOpacity

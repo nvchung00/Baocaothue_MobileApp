@@ -6,8 +6,7 @@
  * @flow strict-local
  */
 
- import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
- import React, { useState, useCallback } from 'react';
+ import React, { useState } from 'react';
  import {
    SafeAreaView,
    ScrollView,
@@ -15,43 +14,15 @@
    Text,
    View,
    TextInput,
-   Button,
    TouchableOpacity
  } from 'react-native';
  import SelectDropdown from 'react-native-select-dropdown'
+ import SelectedDate from './src/component/SelectDate';
  
  
  const App = () => {
  
-   const [dateString, setDateString] = useState('2-2022')
    const countries = ["Egypt", "Canada", "Australia", "Ireland"]
- 
-   const onChange = (event, selectedDate) => {
-     const currentDate = selectedDate;
-     setDate(currentDate);
-     var month = date.getUTCMonth() + 1; //months from 1-12
-     var day = date.getUTCDate();
-     var year = date.getUTCFullYear();
-   };
- 
-   const showMode = (currentMode) => {
-     DateTimePickerAndroid.open({
-       value: date,
-       onChange,
-       mode: currentMode,
-       is24Hour: true
-     })
-   };
- 
-   const showDatepicker = () => {
-     showMode('date');
-   };
- 
-   const showTimepicker = () => {
-     showMode('time');
-   };
- 
-   const [date, setDate] = useState(new Date());
  
    return (
      <SafeAreaView style={styles.container}>
@@ -64,25 +35,14 @@
          </View>
          <View style={styles.main}>
            <View style={styles.pickerDate}>
-             <View style={{ flex: 5 }}>
-               <TextInput
-                 style={styles.input}
-               />
-             </View>
-             <View style={{ flex: 2, marginLeft: 10 }}>
-               <TouchableOpacity
-                 style={styles.button}
-                 
-               >
-                 <Text style={{ color: "#ffff" }}>Chọn ngày</Text>
-               </TouchableOpacity>
-             </View>
+             <SelectedDate />
            </View>
            <View style={styles.add}>
              <View style={{ flex: 5 }}>
                <TextInput
                  style={styles.input}
                />
+               
              </View>
              <View style={{ flex: 2, marginLeft: 10 }}>
                <TouchableOpacity
@@ -140,7 +100,6 @@
              <View style={{ flex: 1, marginLeft: 10, marginTop: 20 }}>
                <TouchableOpacity
                  style={styles.button}
-                 onPress={showDatepicker}
                >
                  <Text style={{ color: "#ffff" }}>Refresh</Text>
                </TouchableOpacity>
@@ -148,7 +107,7 @@
              <View style={{ flex: 1, marginLeft: 10, marginTop: 20 }}>
                <TouchableOpacity
                  style={styles.button}
-                 onPress={showDatepicker}
+                 onPress={() => alert('Error: Bạn chờ chút thử lại')}
                >
                  <Text style={{ color: "#ffff" }}>Thông báo</Text>
                </TouchableOpacity>
@@ -177,9 +136,7 @@
      borderWidth: 1,
    },
    pickerDate: {
-     flexDirection: 'row',
      width: '100%',
-     flexWrap: 'wrap'
    },
    add: {
      flexDirection: 'row',
