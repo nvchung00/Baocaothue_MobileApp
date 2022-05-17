@@ -17,8 +17,6 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import MonthPicker from 'react-native-month-picker';
-import Dialog, { DialogContent } from 'react-native-popup-dialog';
-import DataTable from './DataTable';
 
 const styles = StyleSheet.create({
   container: {},
@@ -65,17 +63,18 @@ const SelectedDate = () => {
   const [isOpen, toggleOpen] = useState(false);
   const [value, onChange] = useState(null);
   const [open, setOpen] = useState(false)
+  var locale = 'he'
 
   return (
     <View style={styles.container}>
-      <Text>Thời gian: </Text>
+      <Text style={{fontWeight: 'bold'}}>Thời gian: </Text>
       <TouchableOpacity onPress={() => toggleOpen(true)} style={styles.input}>
         <Text style={styles.inputText}>
           {value ? moment(value).format('MM/YYYY') : "04/2022"}
         </Text>
       </TouchableOpacity>
 
-      <Modal
+{/*       <Modal
         transparent
         animationType="fade"
         visible={open}
@@ -94,7 +93,7 @@ const SelectedDate = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       <Modal
         transparent
@@ -108,6 +107,7 @@ const SelectedDate = () => {
             <MonthPicker
               selectedDate={value || new Date()}
               onMonthChange={onChange}
+              localeLanguage=  'vn'
             />
             <TouchableOpacity
               style={styles.confirmButton}
